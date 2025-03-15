@@ -210,7 +210,7 @@ fun ComponentScreen3(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(100.dp))
         Image(
-            painter = painterResource(id = R.drawable.bro),
+            painter = painterResource(id = R.drawable.bro2),
             contentDescription = "Time Management",
             modifier = Modifier.size(250.dp)
         )
