@@ -1,6 +1,6 @@
 package uth.edu.bai02.ui.screen
 
-import android.window.SplashScreen
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +33,7 @@ fun SplashScreen(navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center){
         Image(
-            painterResource(id= R.drawable.image_2), contentDescription = "UTH",
+            painterResource(id= R.drawable.image_22), contentDescription = "UTH",
             modifier = Modifier.size(100.dp))
         Spacer(modifier = Modifier.padding(8.dp))
         Text("UTH SmartTasks", fontSize = 40.sp,

@@ -3,8 +3,11 @@
 package uth.edu.bai02.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,12 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,17 +43,31 @@ fun TaskDetailScreen(task: Task, navController:NavController) {
             TopAppBar(
                 title = {
                     Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center)
-                    {
-                    Text("Detail", fontWeight = FontWeight.Bold) }
-                        },
-                navigationIcon = {
-                    IconButton(onClick ={navController.popBackStack() }) {
-                        Image(painterResource(id = R.drawable.image_2), contentDescription = "Back",
-                            modifier = Modifier.size(40.dp))
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.image_2),
+                                contentDescription = "Back",
+                                modifier = Modifier.size(40.dp).weight(1f).
+                                clickable { navController.navigate("home") }
+                            )
+                            Column {
+                                Text("SmartTasks", fontSize = 24.sp)
+                                Text("A simple and efficient to-do app", fontSize = 16.sp)
+                            }
+                            Image(
+                                painter = painterResource(id = R.drawable.image_15),
+                                contentDescription = "Loa",
+                                modifier = Modifier.size(40.dp).weight(1f)
+                            )
+                        }
                     }
-                },
+                        },
 
 
             )
@@ -57,6 +78,44 @@ fun TaskDetailScreen(task: Task, navController:NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = task.description, color = Color.Gray, fontSize = 16.sp)
 
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFD9AAB3)) // Màu nền phù hợp
+            ) {
+                Column(
+                    modifier = Modifier.padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(painterResource(id = R.drawable.group_9), contentDescription = null,
+                                modifier = Modifier.size(28.dp))
+                            Text(text = "Category", fontSize = 16.sp, color = Color.Black)
+                            Text(text = task.category, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(painterResource(id = R.drawable.image_9), contentDescription = null,
+                                modifier = Modifier.size(28.dp))
+                            Text(text = "Status", fontSize = 16.sp, color = Color.Black)
+                            Text(text = task.status, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(painterResource(id = R.drawable.image_10), contentDescription = null,
+                                modifier = Modifier.size(28.dp))
+                            Text(text = "Priority", fontSize = 16.sp, color = Color.Black)
+                            Text(text = task.priority, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        }
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Subtasks", fontWeight = FontWeight.Bold, fontSize = 18.sp)
             task.subtasks.forEach {
@@ -66,11 +125,19 @@ fun TaskDetailScreen(task: Task, navController:NavController) {
                         .padding(4.dp),
                     elevation = CardDefaults.cardElevation(2.dp)
                 ) {
-                    Text(
-                        text = it.title,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 14.sp
-                    )
+                    Row {
+                        var checked by remember { mutableStateOf(false) }
+
+                        Checkbox(
+                            checked = checked,
+                            onCheckedChange = { checked = it }
+                        )
+                        Text(
+                            text = it.title,
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             }
 
@@ -83,32 +150,20 @@ fun TaskDetailScreen(task: Task, navController:NavController) {
                         .padding(4.dp),
                     elevation = CardDefaults.cardElevation(2.dp)
                 ) {
-                    Text(
-                        text = it.fileName,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 14.sp
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Reminders", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            task.reminders.forEach {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    elevation = CardDefaults.cardElevation(2.dp)
-                ) {
-                    Text(
-                        text = it.time,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = it.type,
-                        modifier = Modifier.padding(8.dp),
-                        fontSize = 14.sp
-                    )
+                    Row {
+                        var checked by remember { mutableStateOf(false) }
+
+                        Checkbox(
+                            checked = checked,
+                            onCheckedChange = { checked = it }
+                        )
+                        Text(
+                            text = it.fileName,
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 14.sp
+                        )
+                    }
+
                 }
             }
         }
